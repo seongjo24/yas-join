@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'com.google.cloud.tools.jib' version '3.1.2'
 }
 
 group = 'yas'
@@ -26,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -38,4 +40,22 @@ dependencyManagement {
 }
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jib {
+	from {
+		image = "eclipse-temurin:17-jre"
+	}
+	to {
+		image = project.name
+
+		tags = setOf("latest")
+	}
+	container {
+		creationTime = "USE_CURRENT_TIMESTAMP"
+
+		jvmFlags = listOf("-Dspring.profiles.active=docker", "-XX:+UseContainerSupport", "-Duser.timezone=Asia/Seoul")
+
+		ports = listOf("8080")
+	}
 }

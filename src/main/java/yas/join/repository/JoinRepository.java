@@ -8,5 +8,5 @@ import java.util.List;
 public interface JoinRepository extends JpaRepository<JoinEntity, Long> {
     //Optional<JoinEntity> findByUserAndTeam(UserEntity userEntity, TeamEntity team);
 
-    List<JoinEntity> findByTeamId(Long teamId);
+    //List<JoinEntity> findByTeamId(Long teamId);
 }
